@@ -115,10 +115,11 @@ func (m GelfMessage) getExtraFields() (json.RawMessage, error) {
 		"_image_name":             m.Container.Config.Image,
 		"_command":                strings.Join(m.Container.Config.Cmd[:], " "),
 		"_created":                m.Container.Created,
-		"_rancher_host":           hostname,
 		"_logspout_instance":      logspoutInstance,
-		"_logspout_source":        m.Source,
-		"_task_definition_family": m.Container.Config.Labels["com.amazonaws.ecs.task-definition-family"],
+		"_task_definition":        m.Container.Config.Labels["com.amazonaws.ecs.task-definition-family"],
+		"_task_revision":          m.Container.Config.Labels["com.amazonaws.ecs.task-definition-version"],
+		"_ecs_cluster":            m.Container.Config.Labels["com.amazonaws.ecs.cluster"],
+		"_stack_name":             m.Container.Config.Labels["StackName"],
 	}
 	for name, label := range m.Container.Config.Labels {
 		if len(name) > 5 && strings.ToLower(name[0:5]) == "gelf_" {
